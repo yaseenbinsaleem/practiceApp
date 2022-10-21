@@ -2,7 +2,8 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 import React from "react";
 import "./home.css";
-
+import Card2Component from "../../components/card/card2";
+import CardData from "../../data/cardData";
 
 import {
   TableContainer,
@@ -14,8 +15,11 @@ import {
   Paper,
 } from "@mui/material";
 
-function Home(props) {
+function Home(props,route) {
   const [count, setCount] = useState(0);
+
+  const item = route.apiData;
+  console.log('item',item);
 
   function decrementCount() {
     if (count != 0) {
@@ -109,6 +113,10 @@ function Home(props) {
       ip_address: "148.48.45.196",
     },
   ];
+
+  let [apiData, setApiData] = useState([]);
+ 
+
   
   return (
     <>
@@ -126,8 +134,25 @@ function Home(props) {
           increment
         </Button>
       </div>
+<CardData apiData={apiData} setApiData={setApiData}  />
+<div>
+  {apiData.map((data, i) => (
+        <Card2Component
+          key={i}
+          image={data.images[0]}
+          title={data.title}
+          price={data.price}
+          description={data.description}
+        ></Card2Component>
+      ))}
+      
 
-      <TableContainer component={Paper}>
+      
+    </div>
+    </>
+  );
+}
+      {/* <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
@@ -151,10 +176,6 @@ function Home(props) {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
-      
-    </>
-  );
-}
+      </TableContainer>  */}
 
 export default Home;
