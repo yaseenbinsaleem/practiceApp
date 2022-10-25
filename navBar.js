@@ -81,6 +81,7 @@ function NavBar() {
                 <Button variant="contained" onClick={()=>navigation("")}> HOME </Button>
     
                 <Button variant="contained" onClick={()=>navigation("todoApp")}>TODO APP</Button>
+                <Button variant="contained" onClick={()=>navigation("calender")}>CALENDER</Button>
               
             </Box>
           </Toolbar>
