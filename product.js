@@ -19,10 +19,7 @@ export default function Product(props) {
 
   return (
     <>
-      {/* <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
-      ></Backdrop> */}
+      
       <Box
         sx={{
           display: "flex",
