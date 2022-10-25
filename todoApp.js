@@ -12,18 +12,26 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useState } from "react";
-import Divider from "@mui/material/Divider";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Modal from "@mui/material/Modal";
 import CardComponent from "../../components/card/card";
+import dayjs from 'dayjs';
+import Stack from '@mui/material/Stack';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 function TodoApp() {
   const [values, setValues] = useState({
     work: "",
-    time: ""
+    time: "",
+    date:""
   });
   const [valueIndex, setValueIndex] = useState(null);
   const [formData, setFormData] = useState([]);
@@ -38,6 +46,9 @@ function TodoApp() {
   const HandleTimeChange = (e) => {
     setValues({ ...values, time: e.target.value });
   };
+ const HandleDateChange = (e) => {
+  setValues({ ...values, date: e.target.value });
+};
 
   const HandleSubmit = (e) => {
     e.preventDefault();
@@ -183,14 +194,14 @@ function TodoApp() {
             ) : null}
             <TextField
               onChange={HandleWorkChange}
-              id="outtlined-basic"
+              id="outlined-basic"
               required
               label="work"
               variant="outlined"
               value={values.work}
               placeholder="what to do?"
             />
-            <TextField
+            {/* <TextField
               onChange={HandleTimeChange}
               id="outlined-basic"
               required
@@ -198,7 +209,27 @@ function TodoApp() {
               variant="outlined"
               value={values.time}
               placeholder="At what time?"
-            />
+            /> */}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Stack spacing={3}>
+        <DesktopDatePicker
+          label="Date desktop"
+          inputFormat="MM/DD/YYYY"
+          value={values.date}
+          onChange={HandleDateChange}
+          renderInput={(params) => <TextField {...params} />}
+        />
+        
+        <TimePicker
+          label="Time"
+          value={values.time}
+          onChange={HandleTimeChange}
+          renderInput={(params) => <TextField {...params} />}
+        />
+
+      
+      </Stack>
+    </LocalizationProvider>
             <Button variant="contained" color="success" onClick={HandleSubmit}>
               add
             </Button>
@@ -242,7 +273,7 @@ function TodoApp() {
           </Box>
         </Modal>
         
-        <cards sx={{ display: "flex", backgroundColor: "red" }}>
+        <cards style={{display:"flex",flexWrap:"wrap", justifyContent:"space-around", padding:"5%"}}>
           {formData.map((value, i) => (
             <CardComponent key={i} works={value.work} times={value.time}>
               <IconButton
