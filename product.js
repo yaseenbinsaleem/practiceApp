@@ -9,21 +9,25 @@ import Card2Component from "../../components/card/card2";
 export default function Product(props) {
   const { productID } = useParams();
   const location = useLocation();
-
+  let { cardData:{id, image, title, price, description} } = location.state;
   //   let [open, setOpen] = useState(true);
 
   //location is used to access data sent through useNavigate using state as second parameter
   //sent from cards2 line no. 83 {i.e navigate(`/product/${productID}`, { state: { cardData } }); }
 
-  console.log(location.state);
+  console.log(location);
 
   return (
     <>
-      
+      {/* <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+      ></Backdrop> */}
       <Box
         sx={{
           display: "flex",
           flexWrap: "wrap",
+
           "& > :not(style)": {
             m: 1,
             width: 128,
@@ -32,11 +36,18 @@ export default function Product(props) {
         }}
       >
         <Card2Component
-          id={location.state.cardData.id}
-          image={location.state.cardData.image}
-          title={location.state.cardData.title}
-          price={location.state.cardData.price}
-          description={location.state.cardData.description}
+          // id={location.state.cardData.id}
+          // image={location.state.cardData.image}
+          // title={location.state.cardData.title}
+          // price={location.state.cardData.price}
+          // description={location.state.cardData.description}
+        
+          id={id}
+          image={image}
+          title={title}
+          price={price}
+          description={description}
+          //destructured on line 12 at products.js
         ></Card2Component>
       </Box>
     </>
