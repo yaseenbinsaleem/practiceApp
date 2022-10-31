@@ -1,114 +1,173 @@
-import React from "react";
-import { NavLink, outlet, useNavigate } from "react-router-dom";
+import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+import { NavLink, Link } from "react-router-dom";
+import { useState } from "react";
+import { UserAuth } from "./authContext";
 
-
-const drawerWidth = 240;
-// const navItems = [{ name: "Home", NavLink: "/Home" }];
+const pages = [ "currency", "products"];
+// const settings = ['Logout'];
 
 function NavBar() {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  // const [login, setlogin] = useState();
+  const { user } = UserAuth()
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
   };
-  const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
-      </Typography>
-      <Divider />
-      <List>
-        {
-          <ListItem
-            disablePadding
-            sx={{ display: "flex", flexDirection: "column" }}
-          >
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText />
-              <NavLink to="/">Home</NavLink>
-            </ListItemButton>
-            <ListItemButton sx={{ textAlign: "center" }}>
-              <ListItemText />
-              <NavLink to="/todoApp">TodoApp</NavLink>
-            </ListItemButton>
-          </ListItem>
-        }
-      </List>
-    </Box>
-  );
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
-  const navigate = useNavigate()
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
 
-  const navigation = (value) =>{
-    navigate(`/${value}`)
-  }
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
   return (
-    <>
-      <Box sx={{ display: "flex" }}>
-        <AppBar component="nav">
-          <Toolbar>
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none"
+            }}
+          >
+            LOGO
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
               color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left"
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "left"
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: "block", md: "none" }
+              }}
             >
-              My App
-            </Typography>
-            <Box sx={{ display: { xs: "none", sm: "block" } }}>
-              
-                <Button variant="contained" onClick={()=>navigation("")}> HOME </Button>
-    
-                <Button variant="contained" onClick={()=>navigation("todoApp")}>TODO APP</Button>
-                <Button variant="contained" onClick={()=>navigation("calender")}>CALENDER</Button>
-              
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <NavLink to={page}>
+                    <Typography textAlign="center">{page}</Typography>
+                  </NavLink>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {pages.map((page) => (
+              <NavLink to={page} key={page}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{
+                    my: 2,
+                    color: "white",
+                    display: "block",
+                    textDecoration: "none"
+                  }}
+                >
+                  {page}
+                </Button>
+              </NavLink>
+            ))}
+          </Box>
+
+          {user ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right"
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <NavLink to="/">
+                    <Typography textAlign="center" >Log Out</Typography>
+                  </NavLink>
+                </MenuItem>
+              </Menu>
             </Box>
-          </Toolbar>
-        </AppBar>
-        <Box component="nav">
-          <Drawer
-            container=""
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            ModalProps={{
-              keepMounted: true // Better open performance on mobile.
-            }}
-            sx={{
-              display: { xs: "block", sm: "none" },
-              "& .MuiDrawer-paper": {
-                boxSizing: "border-box",
-                width: drawerWidth
-              }
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Box>
-      </Box>
-    </>
+          ) : (
+            <Link to="signin">
+              <Button
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  textDecoration: "none"
+                }}
+              >
+                Sign In
+              </Button>
+            </Link>
+          )}
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }
-
 export default NavBar;

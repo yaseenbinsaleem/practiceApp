@@ -1,8 +1,19 @@
-import Home from '../../screens/home/home'
-import TodoApp from '../../screens/todoApp/todoApp'
-import CardData from '../../assets/data/cardData'
-import Product from '../../screens/product/product'
-import PageNotFound from '../../screens/pageNotFound/pageNotFound'
-import Report from '../../screens/report/report'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);
 
-export  {Home,TodoApp,CardData,Product,PageNotFound,Report}
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
